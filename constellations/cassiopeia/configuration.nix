@@ -1,14 +1,41 @@
-_: {
-  # hostname
+{
+  pkgs,
+  stars,
+  config,
+  ...
+}: {
   networking.hostName = "cassiopeia";
-  stars.mainUserName = "r1";
+  stars.mainUser = "r1";
+  system.stateVersion = "24.05";
+  time.timeZone = "Europe/Paris";
 
-  # hardware configs
-  hardware = {
-    # opengl
-    graphics.enable = true;
+  imports = with stars; [
+    boot-plymouth
+    cli-btop
+    cli-eza
+    cli-nvim
+    cli-oh-my-posh
+    cli-zellij
+    cli-zsh
+    core-font
+    core-gh
+    core-pipewire
+    core-sops
+    dev-core
+    dev-garnix
+    dev-rust
+    gui-gnome
+    gui-kitty
+    gui-firefox
+    #gui-schizofox
+    hard-graphics
+    hard-nvidia # nvidia tricks
+    kbd-fr
+    net-network-manager
+    r1-git
+  ];
 
-    # for most advanced wayland compositors
-    nvidia.modesetting.enable = true;
-  };
+  home-manager.users.${config.stars.mainUser}.home.packages = with pkgs; [mullvad-vpn];
+
+  services.mullvad-vpn.enable = true;
 }
